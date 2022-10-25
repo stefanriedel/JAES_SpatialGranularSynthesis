@@ -1,0 +1,335 @@
+{
+  "Experiment": "Listening Experiment",
+  "SubjectInformation": {
+    "Subject": "subject10",
+    "Age": 0,
+    "Gender": "male"
+  },
+  "StartTime": "15 Feb 2022 15:40:43",
+  "EndTime": "15 Feb 2022 16:08:50",
+  "Results": {
+    "PresentedOrderOfParts": [
+      0,
+      1
+    ],
+    "Parts": [
+      {
+        "PresentedOrderOfTrials": [
+          3,
+          0,
+          1,
+          2
+        ],
+        "Trials": [
+          {
+            "TrialName": "PN_250ms_Layers_LEV",
+            "Ratings": [
+              60.0,
+              90.0,
+              50.0,
+              40.0,
+              12.5,
+              77.5,
+              25.0,
+              2.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              6,
+              4,
+              5,
+              0,
+              3,
+              1,
+              7,
+              2
+            ],
+            "ElapsedTimeInSeconds": 202.7896152
+          },
+          {
+            "TrialName": "PN_250ms_Bandwidths_LEV",
+            "Ratings": [
+              50.0,
+              60.0,
+              25.0,
+              70.0,
+              82.5,
+              50.0,
+              12.5,
+              2.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              0,
+              6,
+              3,
+              4,
+              1,
+              2,
+              5,
+              7
+            ],
+            "ElapsedTimeInSeconds": 152.541994
+          },
+          {
+            "TrialName": "ConcretPH_250ms_Layers_LEV",
+            "Ratings": [
+              70.0,
+              55.0,
+              30.0,
+              45.0,
+              12.5,
+              85.0,
+              17.5,
+              0.0
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              0,
+              6,
+              4,
+              3,
+              1,
+              5,
+              2,
+              7
+            ],
+            "ElapsedTimeInSeconds": 217.6889326
+          },
+          {
+            "TrialName": "ConcretPH_250ms_Bandwidths_LEV",
+            "Ratings": [
+              90.0,
+              45.0,
+              32.5,
+              60.0,
+              47.5,
+              27.5,
+              37.5,
+              2.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              0,
+              7,
+              2,
+              1,
+              4,
+              3,
+              5,
+              6
+            ],
+            "ElapsedTimeInSeconds": 203.1228544
+          }
+        ]
+      },
+      {
+        "PresentedOrderOfTrials": [
+          0,
+          2,
+          3,
+          1
+        ],
+        "Trials": [
+          {
+            "TrialName": "PN_250ms_Layers_LEG",
+            "Ratings": [
+              12.5,
+              47.5,
+              87.5,
+              90.0,
+              77.5,
+              40.0,
+              0.0,
+              22.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              4,
+              0,
+              5,
+              2,
+              1,
+              6,
+              7,
+              3
+            ],
+            "ElapsedTimeInSeconds": 179.055307
+          },
+          {
+            "TrialName": "PN_250ms_Bandwidths_LEG",
+            "Ratings": [
+              27.5,
+              92.5,
+              85.0,
+              50.0,
+              37.5,
+              77.5,
+              0.0,
+              15.0
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              2,
+              3,
+              4,
+              7,
+              0,
+              6,
+              5,
+              1
+            ],
+            "ElapsedTimeInSeconds": 266.4095216
+          },
+          {
+            "TrialName": "ConcretPH_250ms_Layers_LEG",
+            "Ratings": [
+              25.0,
+              37.5,
+              80.0,
+              90.0,
+              67.5,
+              40.0,
+              0.0,
+              42.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              0,
+              5,
+              6,
+              1,
+              4,
+              2,
+              7,
+              3
+            ],
+            "ElapsedTimeInSeconds": 214.3974308
+          },
+          {
+            "TrialName": "ConcretPH_250ms_Bandwidths_LEG",
+            "Ratings": [
+              17.5,
+              50.0,
+              90.0,
+              65.0,
+              77.5,
+              40.0,
+              0.0,
+              15.0
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              0,
+              1,
+              3,
+              6,
+              4,
+              7,
+              5,
+              2
+            ],
+            "ElapsedTimeInSeconds": 225.8917847
+          }
+        ]
+      }
+    ]
+  },
+  "MushraAppVersion": "0.1.3"
+}

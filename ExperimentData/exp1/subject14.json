@@ -1,0 +1,252 @@
+{
+  "Experiment": "Evaluation of Listener Envelopment.",
+  "SubjectInformation": {
+    "Subject": "subject14",
+    "Age": 0,
+    "Gender": "male"
+  },
+  "StartTime": "17 Feb 2022 14:20:43",
+  "EndTime": "17 Feb 2022 14:26:41",
+  "Results": {
+    "PresentedOrderOfParts": [
+      0
+    ],
+    "Parts": [
+      {
+        "PresentedOrderOfTrials": [
+          4,
+          0,
+          1,
+          2,
+          5,
+          3
+        ],
+        "Trials": [
+          {
+            "TrialName": "PN_250ms_Wavelets",
+            "Ratings": [
+              55.0,
+              50.0,
+              40.0,
+              57.5,
+              62.5,
+              42.5,
+              57.5,
+              50.0
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              5,
+              2,
+              3,
+              4,
+              1,
+              0,
+              6,
+              7
+            ],
+            "ElapsedTimeInSeconds": 50.9490614
+          },
+          {
+            "TrialName": "PN_0pt5ms_Wavelets",
+            "Ratings": [
+              45.0,
+              55.0,
+              57.5,
+              60.0,
+              45.0,
+              50.0,
+              57.5,
+              60.0
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              0,
+              2,
+              3,
+              1,
+              7,
+              4,
+              6,
+              5
+            ],
+            "ElapsedTimeInSeconds": 38.2852242
+          },
+          {
+            "TrialName": "Vocal_250ms_Wavelets",
+            "Ratings": [
+              60.0,
+              60.0,
+              60.0,
+              62.5,
+              55.0,
+              65.0,
+              60.0,
+              57.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              7,
+              2,
+              6,
+              4,
+              1,
+              3,
+              5,
+              0
+            ],
+            "ElapsedTimeInSeconds": 52.4275647
+          },
+          {
+            "TrialName": "Vocal_0pt5ms_Wavelets",
+            "Ratings": [
+              37.5,
+              62.5,
+              62.5,
+              65.0,
+              47.5,
+              55.0,
+              62.5,
+              65.0
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              6,
+              3,
+              4,
+              5,
+              1,
+              2,
+              0,
+              7
+            ],
+            "ElapsedTimeInSeconds": 59.2473305
+          },
+          {
+            "TrialName": "StringQuartet",
+            "Ratings": [
+              57.5,
+              50.0,
+              60.0,
+              65.0,
+              45.0,
+              47.5,
+              52.5,
+              62.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              7,
+              0,
+              2,
+              3,
+              4,
+              6,
+              5,
+              1
+            ],
+            "ElapsedTimeInSeconds": 95.35428089999999
+          },
+          {
+            "TrialName": "Broadband_vs_Lowpass",
+            "Ratings": [
+              70.0,
+              70.0,
+              70.0,
+              70.0,
+              62.5,
+              75.0,
+              75.0,
+              82.5
+            ],
+            "Scale": {
+              "Min": 0.0,
+              "Max": 100.0,
+              "StepSize": 2.5,
+              "DefaultValue": 50.0,
+              "Labels": [
+                "Not at all",
+                "",
+                "Moderate",
+                "",
+                "Full"
+              ]
+            },
+            "PresentedOrderOfStimuli": [
+              5,
+              3,
+              0,
+              2,
+              6,
+              1,
+              4,
+              7
+            ],
+            "ElapsedTimeInSeconds": 49.7140862
+          }
+        ]
+      }
+    ]
+  },
+  "MushraAppVersion": "0.1.3"
+}
