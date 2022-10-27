@@ -5,6 +5,7 @@ import scipy.signal as signal
 from Utility.noise_psd import pink_noise
 from Utility.getHRIRSubsets import getHRIR_ChannelSubset
 from Utility.spatialGranularSynthesis import spatialGranularSynthesis
+from joblib import Parallel, delayed
 
 # create 2D / 3D granular synthesis stimuli for various parameter settings
 output_gain = 10**(-20/20)
@@ -29,17 +30,19 @@ EVAL_GrainLength = False
 EVAL_MaxGrainDelay = False
 EVAL_Layers = True
 
+RENDER_DIFFUSE_REF = False # only enable once to render the ref. file
+
 num_cond = 4
 if EVAL_GrainLength:
     maximum_grain_delays = [5] * num_cond              
     grain_lengths = [0.250,0.010,0.002,0.0005]    
     temporal_densities = [0.001] * num_cond
-    angular_distributions = ['Uniform_2D_KU100'] * num_cond
+    angular_distributions = ['Uniform_2D'] * num_cond
 if EVAL_MaxGrainDelay:
     maximum_grain_delays = [5, 0.5, 0.050, 0.005]
     grain_lengths = [0.250]  * num_cond
     temporal_densities = [0.001] * num_cond
-    angular_distributions = ['Uniform_2D_KU100'] * num_cond
+    angular_distributions = ['Uniform_2D'] * num_cond
 if EVAL_Layers:
     maximum_grain_delays = [5] * num_cond              
     grain_lengths = [0.250]  * num_cond
@@ -64,7 +67,6 @@ hrir_3D = hrir_3D_dataset[0]
 hrir_l_3D = hrir_3D[:,0,:]
 hrir_r_3D = hrir_3D[:,1,:]
 
-RENDER_DIFFUSE_REF = False
 if RENDER_DIFFUSE_REF:
     num_channels = 360
     Y = np.zeros((N,num_channels), dtype=float)
@@ -74,7 +76,7 @@ if RENDER_DIFFUSE_REF:
     # Render and save 2D diffuse field reference
     y_L = np.zeros(int(Y.shape[0]+hrir_l_2D.shape[1]-1))
     y_R = np.zeros(int(Y.shape[0]+hrir_l_2D.shape[1]-1))
-    
+
     for idx in range(0,num_channels):
         y_L += signal.fftconvolve(Y[:,idx], hrir_l_2D[idx,:])
         y_R += signal.fftconvolve(Y[:,idx], hrir_r_2D[idx,:])
@@ -89,7 +91,43 @@ if RENDER_DIFFUSE_REF:
     output_path = pjoin(save_dir, output_filename)
     wavfile.write(output_path, fs, y_binaural)
 
-# RENDER STIMULI
+
+def mainLoopSimulation(idx):
+    angular_distribution = angular_distributions[idx]
+    grain_length = grain_lengths[idx]
+    temporal_density = temporal_densities[idx]
+    maximum_grain_delay = maximum_grain_delays[idx]
+
+    hrir_l, hrir_r, num_channels = getHRIR_ChannelSubset(angular_distribution, hrir_2D, hrir_3D)
+    jitter = 0
+    Y = spatialGranularSynthesis(audio_buffer, temporal_density, grain_length, maximum_grain_delay, num_channels, stimuli_length, fs, jitter)
+
+    # Binaural rendering 
+    y_L = np.zeros(int(Y.shape[0]+hrir_l.shape[1]-1))
+    y_R = np.zeros(int(Y.shape[0]+hrir_l.shape[1]-1))
+
+    for idx in range(0,num_channels):
+        y_L += signal.oaconvolve(Y[:,idx], hrir_l[idx,:], mode='full')
+        y_R += signal.oaconvolve(Y[:,idx], hrir_r[idx,:], mode='full')
+    y_L *= output_gain
+    y_R *= output_gain
+
+    y_binaural = np.array([y_L, y_R]).transpose()
+
+    output_filename = output_name + '_' + angular_distribution + '_MaxGrainDelay_' + str(int(maximum_grain_delay * 1000)) + 'ms_DeltaT_' + str(int(temporal_density * 1000)) + 'ms_JitterPercent_' + str(int(jitter*100.0)) + '_GrainLength_' + str(int(grain_length * 1000)) +  'ms_BINAURAL.wav'
+
+    output_path = pjoin(save_dir, output_filename)
+    wavfile.write(output_path, fs, y_binaural)
+
+    return
+
+print('Main binaural rendering loop started... \n')
+Parallel(n_jobs=4)(delayed(mainLoopSimulation)(idx) for idx in range(num_stimuli))
+print('Audio Files being saved to .\BinauralAudio now.')
+
+
+
+"""
 for idx in range(num_stimuli):
     angular_distribution = angular_distributions[idx]
     grain_length = grain_lengths[idx]
@@ -116,3 +154,4 @@ for idx in range(num_stimuli):
 
     output_path = pjoin(save_dir, output_filename)
     wavfile.write(output_path, fs, y_binaural)
+"""

@@ -15,7 +15,7 @@ def getHRIR_ChannelSubset(angular_distribution, hrir_2D, hrir_3D):
     SP_idcs = L1_idcs[[2,10]]
     ZEN_idcs = L3_idcs[4]
 
-    if angular_distribution == 'Uniform_2D_KU100':
+    if angular_distribution == 'Uniform_2D':
         hrir_l = hrir_l_2D
         hrir_r = hrir_r_2D
         num_channels = hrir_l.shape[0]
