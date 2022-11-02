@@ -92,7 +92,8 @@ for idx in range(2):
                       yerr=asymmetric_err_leg[:, :, idx * 2], color='k', zorder=2)
 
     axs[idx].set_ylim(-5, 105)
-    axs[idx].set_xticks(xaxis, ['L1', 'L1L2', 'L2', 'L2L3', 'L3', 'L1L2L3', 'SP', 'ZEN'])
+    axs[idx].set_xticks(xaxis)
+    axs[idx].set_xticklabels(['L1', 'L1L2', 'L2', 'L2L3', 'L3', 'L1L2L3', 'SP', 'ZEN'])
     axs[idx].set_xlabel('Active loudspeaker set')
     axs[idx].set_yticks([0, 25, 50, 75, 100])
     if idx==0:

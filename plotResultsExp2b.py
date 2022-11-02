@@ -118,7 +118,8 @@ for ax_idx in range(2):
                 linestyle='none', xerr=0, yerr=asymmetric_iqr_lev[:, 6:8, idx * 2 + 1], color='k', zorder=2)
 
     axs[ax_idx].set_ylim(-5, 105)
-    axs[ax_idx].set_xticks(xaxis, ['L1', 'L2L3', 'L3', 'SP', 'ZEN'])
+    axs[ax_idx].set_xticks(xaxis)
+    axs[ax_idx].set_xticklabels(['L1', 'L2L3', 'L3', 'SP', 'ZEN'])
     axs[ax_idx].set_xlabel('Active loudspeaker set')
     axs[ax_idx].set_yticks([0, 25, 50, 75, 100])
     if ax_idx == 0:
@@ -160,7 +161,8 @@ for ax_idx in range(2):
     axs[ax_idx].errorbar(xaxis[3:5] - 0.1, y=median_all_ratings_leg[6:8, idx * 2 + 1], capsize=4.0, linestyle='none', xerr=0, yerr=asymmetric_iqr_leg[:, 6:8, idx * 2 + 1], color='k', zorder=2)
 
     axs[ax_idx].set_ylim(-5, 105)
-    axs[ax_idx].set_xticks(xaxis, ['L1', 'L2L3', 'L3', 'SP', 'ZEN'])
+    axs[ax_idx].set_xticks(xaxis)
+    axs[ax_idx].set_xticklabels(['L1', 'L2L3', 'L3', 'SP', 'ZEN'])
     axs[ax_idx].set_xlabel('Active loudspeaker set')
     axs[ax_idx].set_yticks([0, 25, 50, 75, 100])
     if ax_idx == 0:
