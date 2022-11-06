@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from Utility.plotsLookAndFeel import *
 
 BLOCK_PLT_SHOW = False
+format = '.eps'
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'ExperimentData', 'exp1')
@@ -82,17 +83,20 @@ for idx in range(4):
 
     axs[idx].set_ylim(-5,105)
     axs[idx].set_xlim(-0.5,3.5)
-    axs[idx].set_xticks([0,1,2,3], xticks_list[tr], fontsize=fs_labels)
+    axs[idx].set_xticks([0,1,2,3])
+    axs[idx].set_xticklabels(xticks_list[tr], fontsize=fs_labels)
     axs[idx].set_xlabel(xlabel_list[tr], fontsize=fs_labels)
-    axs[idx].set_yticks([0,25,50,75,100], ['0', '25', '50', '75', '100'], fontsize=fs_labels)
+    axs[idx].set_yticks([0,25,50,75,100])
+    axs[idx].set_yticklabels(['0', '25', '50', '75', '100'], fontsize=fs_labels)
+
     if idx==0:
         axs[idx].set_ylabel('Envelopment', fontsize=fs_labels)
         axs[idx].legend(framealpha=1, loc='lower right', fontsize=fs_labels)
     axs[idx].set_title(title_list[tr], fontsize=fs_labels)
-    axs[idx].grid(alpha=0.5)
+    axs[idx].grid(alpha=1)
 
 plt.tight_layout()
-plt.savefig(fname=pjoin(figures_dir,'envelopment_temporal_density.pdf'), format='pdf', bbox_inches='tight')
+plt.savefig(fname=pjoin(figures_dir,'envelopment_temporal_density' + format), bbox_inches='tight')
 plt.show(block=BLOCK_PLT_SHOW)
 
 
@@ -122,11 +126,11 @@ for idx in range(1):
     if idx==0:
         plt.ylabel('Envelopment', fontsize=fs_labels)
     plt.title(title_list[tr], fontsize=fs_labels)
-    plt.grid(alpha=0.5)
+    plt.grid(alpha=1)
     plt.legend(framealpha=1, loc='lower right', fontsize=fs_labels)
 
 plt.tight_layout()
-plt.savefig(fname=pjoin(figures_dir,'envelopment_directional_density.pdf'), format='pdf', bbox_inches='tight')
+plt.savefig(fname=pjoin(figures_dir,'envelopment_directional_density' + format), bbox_inches='tight')
 plt.show(block=BLOCK_PLT_SHOW)
 
 
