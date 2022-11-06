@@ -6,6 +6,7 @@ import os
 from Utility.plotsLookAndFeel import *
 
 BLOCK_PLT_SHOW = False
+format = '.eps'
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'ExperimentData', 'exp2')
@@ -100,8 +101,7 @@ for idx in range(2):
         axs[idx].set_ylabel('Envelopment / Engulfment')
     axs[idx].set_title(titles_list[idx])
     axs[idx].grid()
-    axs[idx].legend()
-plt.savefig(fname=pjoin(figures_dir, 'layers_lev_leg.pdf'),
-            format='pdf',
+    axs[idx].legend(framealpha=1)
+plt.savefig(fname=pjoin(figures_dir, 'layers_lev_leg' + format),
             bbox_inches='tight')
 plt.show(block=BLOCK_PLT_SHOW)

@@ -6,6 +6,7 @@ import os
 from Utility.plotsLookAndFeel import *
 
 BLOCK_PLT_SHOW = False
+format = '.eps'
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'ExperimentData', 'exp2')
@@ -127,8 +128,7 @@ for ax_idx in range(2):
     axs[ax_idx].set_title(title_list[ax_idx])
     axs[ax_idx].grid()
     axs[ax_idx].legend(framealpha=1)
-plt.savefig(fname=pjoin(figures_dir, 'bandwidths_lev.pdf'),
-        format='pdf',
+plt.savefig(fname=pjoin(figures_dir, 'bandwidths_lev' + format),
         bbox_inches='tight')
 plt.show(block=BLOCK_PLT_SHOW)
 
@@ -170,7 +170,6 @@ for ax_idx in range(2):
     axs[ax_idx].set_title(title_list[ax_idx])
     axs[ax_idx].grid()
     axs[ax_idx].legend(framealpha=1)
-plt.savefig(fname=pjoin(figures_dir, 'bandwidths_leg.pdf'),
-        format='pdf',
+plt.savefig(fname=pjoin(figures_dir, 'bandwidths_leg' + format),
         bbox_inches='tight')
 plt.show(block=BLOCK_PLT_SHOW)
