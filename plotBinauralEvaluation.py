@@ -5,6 +5,7 @@ from scipy.io import wavfile
 from os.path import dirname, join as pjoin
 from Utility.interauralCoherence import compute_IC_Welch
 
+format = '.eps'
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'BinauralAudio')
@@ -22,9 +23,6 @@ f_c = np.load(pjoin(utility_dir, filename))
 blocksize = 4096
 
 name = 'Pink'
-EVAL_MaxGrainDelay = True
-EVAL_GrainLength = False
-EVAL_Layers = False
 
 eval_list = ['EVAL_GrainLength', 'EVAL_MaxGrainDelay', 'EVAL_Layers']
 
@@ -136,7 +134,7 @@ for eval_idx in range(3):
         axs[0,eval_idx].legend(framealpha=1.0, loc='upper right')
 
 
-plt.savefig(fname=pjoin(save_dir, 'GranularEvaluationPlot.pdf'), bbox_inches='tight')
+plt.savefig(fname=pjoin(save_dir, 'GranularEvaluationPlot' + format), bbox_inches='tight')
 print('done')
 
 

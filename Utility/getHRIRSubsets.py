@@ -31,6 +31,10 @@ def getHRIR_ChannelSubset(angular_distribution, hrir_2D, hrir_3D):
         hrir_l = hrir_l_3D[L3_idcs,:]
         hrir_r = hrir_r_3D[L3_idcs,:]
         num_channels = hrir_l.shape[0]
+    if angular_distribution == 'L2L3':
+        hrir_l = hrir_l_3D[np.concatenate((L2_idcs,L3_idcs)),:]
+        hrir_r = hrir_r_3D[np.concatenate((L2_idcs,L3_idcs)),:]
+        num_channels = hrir_l.shape[0]
     if angular_distribution == 'ZEN':
         hrir_l = np.array([hrir_l_3D[ZEN_idcs,:]])
         hrir_r = np.array([hrir_r_3D[ZEN_idcs,:]])
