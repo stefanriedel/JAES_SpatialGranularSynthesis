@@ -7,7 +7,7 @@ Dependencies:
 * matplotlib
 * joblib
 
-A spatial granular synthesis technique was used to investigate the effect of the temporal and directional density of sound events on listener envelopment and engulfment. The idea behind spatial granular synthesis can be seen in the following sketch:
+A spatial granular synthesis technique was used to investigate the effect of the temporal and directional density of sound events on listener envelopment ('surrounded by sound') and engulfment ('being covered by sound'). The idea behind spatial granular synthesis can be seen in the following sketch:
 
 <img src="/Figures/SGS/SGS_sketch.PNG" alt="drawing" width="800"/>
 
