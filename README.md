@@ -11,4 +11,4 @@ A spatial granular synthesis technique was used to investigate the effect of the
 
 <img src="/Figures/SGS/SGS_sketch.PNG" alt="drawing" width="800"/>
 
-Small audio segments are sampled from a single-channel audio buffer and distributed in space. In the experiment we used a multichannel loudspeaker system composed of three height layers. Pre-rendered plots can be found in the /Figures subdirectory, and to render binaural audio use the *renderBinauralEvaluationStimuli.py* script. Some pre-rendered audio files are found at /BinauralAudio. These files are used by the  *plotBinauralEvaluation.py* script.
+Audio 'grains' of length $$L$$ seconds are sampled from a single-channel sample buffer and distributed in space every $$\Delta t$$ seconds. In the experiment we used a multichannel loudspeaker system composed of three height layers. Pre-rendered plots can be found in the /Figures subdirectory, and to render binaural audio use the *renderBinauralEvaluationStimuli.py* script. Some pre-rendered audio files are found at /BinauralAudio. These files are used by the  *plotBinauralEvaluation.py* script.
