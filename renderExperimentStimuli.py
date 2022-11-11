@@ -43,22 +43,21 @@ EXP1_STIMULI = False
 EXP2_STIMULI = True
 
 if EXP1_STIMULI:
-    maximum_grain_delays = [5]
+    seed_range = [5]
     grain_lengths = [0.0005, 0.250]
     temporal_densities = [0.001, 0.005, 0.020, 0.100]
-    angular_distributions = ['L1', 'L1L2L3']
+    subset = ['L1', 'L1L2L3']
 if EXP2_STIMULI:
-    maximum_grain_delays = [5]
+    seed_range = [5]
     grain_lengths = [0.250]
     temporal_densities = [0.020]
-    angular_distributions = ['L1', 'L1L2', 'L2', 'L2L3', 'L3', 'L1L2L3', 'SP']
+    subset = ['L1', 'L1L2', 'L2', 'L2L3', 'L3', 'L1L2L3', 'SP']
 
 parameters = list(
-    itertools.product(maximum_grain_delays, grain_lengths, temporal_densities,
-                      angular_distributions))
+    itertools.product(seed_range, grain_lengths, temporal_densities, subset))
 num_stimuli = len(parameters)
-"""[maximum_grain_delays, grain_lengths, temporal_densities, angular_distributions] = parameter_lists
-parameter_lists = [grain_lengths, temporal_densities, angular_distributions, maximum_grain_delays]
+"""[seed_range, grain_lengths, temporal_densities, subset] = parameter_lists
+parameter_lists = [grain_lengths, temporal_densities, subset, seed_range]
 num_stimuli = len(parameter_lists[0])
 for l in parameter_lists:
     if num_stimuli != len(l):
@@ -74,8 +73,7 @@ if RENDER_BINAURAL_ANECHOEIC_STIMULI:
 
     DEQ = False
     if DEQ:
-        diff_eq_ir_l, diff_eq_ir_r = compute_deq(hrir_l_2D, hrir_r_2D, 4096,
-                                                 48000)
+        deq_ir_l, deq_ir_r = compute_deq(hrir_l_2D, hrir_r_2D, 4096, 48000)
 
     # Load the 3D HRIR set of the KU100 dummy head
     hrir_3D_dataset = np.load(file='./Utility/HRIR_FULL2DEG_48kHz.npy',
@@ -85,8 +83,8 @@ if RENDER_BINAURAL_ANECHOEIC_STIMULI:
     hrir_r_3D = hrir_3D[:, 1, :]
 
     if DEQ:
-        hrir_l_3D, hrir_r_3D = apply_deq(hrir_l_3D, hrir_r_3D, diff_eq_ir_l,
-                                         diff_eq_ir_r, 4096, 48000)
+        hrir_l_3D, hrir_r_3D = apply_deq(hrir_l_3D, hrir_r_3D, deq_ir_l,
+                                         deq_ir_r, 4096, 48000)
         hrir_3D = np.stack((hrir_l_3D, hrir_r_3D), axis=1)
 
 
@@ -111,10 +109,10 @@ def renderBinaural(Y, hrir_l, hrir_r, gain):
 
 
 def mainLoopRendering(idx):
-    maximum_grain_delay = parameters[idx][0]  #maximum_grain_delays[idx]
+    maximum_grain_delay = parameters[idx][0]  #seed_range[idx]
     grain_length = parameters[idx][1]  #grain_lengths[idx]
     temporal_density = parameters[idx][2]  #temporal_densities[idx]
-    angular_distribution = parameters[idx][3]  #angular_distributions[idx]
+    angular_distribution = parameters[idx][3]  #subset[idx]
 
     jitter = 0.01  # 1 percent temporal jitter used in the experiment.
     azi_ele, num_channels = getLoudspeaker_ChannelSubset(angular_distribution)
