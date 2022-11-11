@@ -8,7 +8,7 @@ from Utility.interauralCoherence import compute_IC_Welch
 format = '.eps'
 
 root_dir = dirname(__file__)
-data_dir = pjoin(root_dir, 'BinauralAudio')
+data_dir = pjoin(root_dir, 'BinauralEvaluationAudio')
 utility_dir = pjoin(root_dir, 'Utility')
 save_dir =  pjoin(root_dir, 'Figures', 'BinauralEvaluation')
 

@@ -3,20 +3,20 @@ from os.path import dirname, join as pjoin
 from scipy.io import wavfile
 import scipy.signal as signal
 from Utility.noise_psd import pink_noise
-from Utility.getHRIRSubsets import getHRIR_ChannelSubset
+from Utility.getSubsets import getHRIR_ChannelSubset
 from Utility.spatialGranularSynthesis import spatialGranularSynthesis
 from joblib import Parallel, delayed
 
-# create 2D / 3D granular synthesis stimuli for various parameter settings
+root_dir = dirname(__file__)
+data_dir = pjoin(root_dir, 'Files')
+save_dir = pjoin(root_dir, 'BinauralEvaluationAudio')
+utility_dir = pjoin(root_dir, 'Utility')
+
+# create 2D / 3D granular synthesis stimuli for binaural evaluation
 output_gain = 10**(-20/20)
 fs = int(48000.0)
 stimuli_length = 5.0     # in seconds                                            
 N = int(stimuli_length * fs) 
-
-root_dir = dirname(__file__)
-data_dir = pjoin(root_dir, 'Files')
-save_dir = pjoin(root_dir, 'BinauralAudio')
-utility_dir = pjoin(root_dir, 'Utility')
 
 #Audio buffer: Pink Noise Generation
 audio_buffer = pink_noise(fs * 10)
@@ -30,7 +30,7 @@ EVAL_GrainLength = False
 EVAL_MaxGrainDelay = False
 EVAL_Layers = True
 
-RENDER_DIFFUSE_REF = False # only enable once to render the ref. file
+RENDER_DIFFUSE_REF = True # only enable once to render the ref. file
 
 num_cond = 4
 if EVAL_GrainLength:
