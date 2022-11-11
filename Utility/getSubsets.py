@@ -1,7 +1,7 @@
 import numpy as np
 from os.path import dirname, join as pjoin
 
-def getLoudspeakerSubsetData(angular_distribution):
+def getLoudspeaker_ChannelSubset(angular_distribution):
     cube_sph_coord = np.array([ [0,0], [-22.5,0], [-45,0], [-75,0], [-105,0], [-135,0], [-180,0], [135,0], [105,0], [75,0], [45,0], [22.5,0], 
             [-22.5,30], [-67.5,30], [-112.5,30], [-157.5,30], [157.5,30], [112.5,30], [67.5,30], [22.5,30], 
             [0,60], [-90,60], [-180,60], [90,60], [0,90]])
