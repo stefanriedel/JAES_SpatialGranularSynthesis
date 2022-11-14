@@ -4,7 +4,7 @@ from scipy.io import wavfile
 import scipy.signal as signal
 from Utility.noise_psd import pink_noise
 from Utility.getSubsets import getHRIR_ChannelSubset, getLoudspeaker_ChannelSubset
-from Utility.spatialGranularSynthesis import spatialGranularSynthesis
+from spatialGranularSynthesis import spatialGranularSynthesis
 from joblib import Parallel, delayed
 import soundfile
 import itertools
@@ -39,8 +39,8 @@ RENDER_MULTICHANNEL_STIMULI = False
 RENDER_BINAURAL_BRIR_STIMULI = False
 RENDER_BINAURAL_ANECHOEIC_STIMULI = True
 
-EXP1_STIMULI = False
-EXP2_STIMULI = True
+EXP1_STIMULI = True
+EXP2_STIMULI = False
 
 if EXP1_STIMULI:
     seed_range = [5]

@@ -1,20 +1,25 @@
 import numpy as np
 from os.path import dirname, join as pjoin
 
-def getLoudspeaker_ChannelSubset(angular_distribution):
-    cube_sph_coord = np.array([ [0,0], [-22.5,0], [-45,0], [-75,0], [-105,0], [-135,0], [-180,0], [135,0], [105,0], [75,0], [45,0], [22.5,0], 
-            [-22.5,30], [-67.5,30], [-112.5,30], [-157.5,30], [157.5,30], [112.5,30], [67.5,30], [22.5,30], 
-            [0,60], [-90,60], [-180,60], [90,60], [0,90]])
 
-    L1 = cube_sph_coord[:12,:]
-    L2 = cube_sph_coord[12:(12+8),:]
-    L3 = cube_sph_coord[(12+8):(12+8+5),:]
+def getLoudspeaker_ChannelSubset(angular_distribution):
+    cube_sph_coord = np.array([[0, 0], [-22.5, 0], [-45, 0], [-75, 0],
+                               [-105, 0], [-135, 0], [-180, 0], [135, 0],
+                               [105, 0], [75, 0], [45, 0], [22.5, 0],
+                               [-22.5, 30], [-67.5, 30], [-112.5, 30],
+                               [-157.5, 30], [157.5, 30], [112.5, 30],
+                               [67.5, 30], [22.5, 30], [0, 60], [-90, 60],
+                               [-180, 60], [90, 60], [0, 90]])
+
+    L1 = cube_sph_coord[:12, :]
+    L2 = cube_sph_coord[12:(12 + 8), :]
+    L3 = cube_sph_coord[(12 + 8):(12 + 8 + 5), :]
 
     if angular_distribution == 'L1':
         azi_ele = L1
         num_channels = azi_ele.shape[0]
     if angular_distribution == 'L1L2':
-        azi_ele = np.concatenate((L1,L2))
+        azi_ele = np.concatenate((L1, L2))
         num_channels = azi_ele.shape[0]
     if angular_distribution == 'L2':
         azi_ele = L2
@@ -23,73 +28,59 @@ def getLoudspeaker_ChannelSubset(angular_distribution):
         azi_ele = L3
         num_channels = azi_ele.shape[0]
     if angular_distribution == 'L2L3':
-        azi_ele = np.concatenate((L2,L3))
+        azi_ele = np.concatenate((L2, L3))
         num_channels = azi_ele.shape[0]
     if angular_distribution == 'L1L2L3':
-        azi_ele = np.concatenate((L1,L2,L3))
+        azi_ele = np.concatenate((L1, L2, L3))
         num_channels = azi_ele.shape[0]
     if angular_distribution == 'ZEN':
-        azi_ele = cube_sph_coord[-1,:]
+        azi_ele = cube_sph_coord[-1, :]
         num_channels = azi_ele.shape[0]
     if angular_distribution == 'SP':
-        azi_ele = cube_sph_coord[[2,10],:]
+        azi_ele = cube_sph_coord[[2, 10], :]
         num_channels = azi_ele.shape[0]
 
     return azi_ele, num_channels
 
+
 def getHRIR_ChannelSubset(angular_distribution, hrir_2D, hrir_3D):
     root_dir = dirname(__file__)
-    hrir_l_2D = hrir_2D[:,0,:]
-    hrir_r_2D = hrir_2D[:,1,:]
-
-    hrir_l_3D = hrir_3D[:,0,:]
-    hrir_r_3D = hrir_3D[:,1,:]
 
     L1_idcs = np.load(pjoin(root_dir, 'L1_idcs_FULL2DEG.npy'))
     L2_idcs = np.load(pjoin(root_dir, 'L2_idcs_FULL2DEG.npy'))
     L3_idcs = np.load(pjoin(root_dir, 'L3_idcs_FULL2DEG.npy'))
-    SP_idcs = L1_idcs[[2,10]]
+    SP_idcs = L1_idcs[[2, 10]]
     ZEN_idcs = L3_idcs[4]
 
     if angular_distribution == 'Uniform_2D':
-        hrir_l = hrir_l_2D
-        hrir_r = hrir_r_2D
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_2D
+        num_channels = hrir.shape[0]
     if angular_distribution == 'L1':
-        hrir_l = hrir_l_3D[L1_idcs,:]
-        hrir_r = hrir_r_3D[L1_idcs,:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[L1_idcs, ...]
+        num_channels = hrir.shape[0]
     if angular_distribution == 'L1L2':
-        hrir_l = hrir_l_3D[np.concatenate((L1_idcs,L2_idcs)),:]
-        hrir_r = hrir_r_3D[np.concatenate((L1_idcs,L2_idcs)),:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[np.concatenate((L1_idcs, L2_idcs)), ...]
+        num_channels = hrir.shape[0]
     if angular_distribution == 'L2':
-        hrir_l = hrir_l_3D[L2_idcs,:]
-        hrir_r = hrir_r_3D[L2_idcs,:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[L2_idcs, ...]
+        num_channels = hrir.shape[0]
     if angular_distribution == 'L3':
-        hrir_l = hrir_l_3D[L3_idcs,:]
-        hrir_r = hrir_r_3D[L3_idcs,:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[L3_idcs, ...]
+        num_channels = hrir.shape[0]
     if angular_distribution == 'L2L3':
-        hrir_l = hrir_l_3D[np.concatenate((L2_idcs,L3_idcs)),:]
-        hrir_r = hrir_r_3D[np.concatenate((L2_idcs,L3_idcs)),:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[np.concatenate((L2_idcs, L3_idcs)), ...]
+        num_channels = hrir.shape[0]
     if angular_distribution == 'L1L2L3':
-        hrir_l = hrir_l_3D[np.concatenate((L1_idcs,L2_idcs,L3_idcs)),:]
-        hrir_r = hrir_r_3D[np.concatenate((L1_idcs,L2_idcs,L3_idcs)),:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[np.concatenate((L1_idcs, L2_idcs, L3_idcs)), ...]
+        num_channels = hrir.shape[0]
     if angular_distribution == 'ZEN':
-        hrir_l = np.array([hrir_l_3D[ZEN_idcs,:]])
-        hrir_r = np.array([hrir_r_3D[ZEN_idcs,:]])
-        num_channels = hrir_l.shape[0]
+        hrir = np.array([hrir_3D[ZEN_idcs, ...]])
+        num_channels = hrir.shape[0]
     if angular_distribution == 'SP':
-        hrir_l = hrir_l_3D[SP_idcs,:]
-        hrir_r = hrir_r_3D[SP_idcs,:]
-        num_channels = hrir_l.shape[0]
+        hrir = hrir_3D[SP_idcs, ...]
+        num_channels = hrir.shape[0]
 
-    return hrir_l, hrir_r, num_channels
-
+    return hrir, num_channels
 
 
 """

@@ -3,9 +3,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import wavfile
 from os.path import dirname, join as pjoin
-from Utility.interauralCoherence import compute_IC_Welch
+from Utility.interauralCoherence import compute_IC_Welch, compute_IC
 
 format = '.eps'
+
+# FIX LENGTHs of EVAL STIMULI, TempDensity only 2 sec. long
+num_blocks = 22
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'BinauralEvaluationAudio')
@@ -24,16 +27,22 @@ blocksize = 4096
 
 name = 'Pink'
 
-eval_list = ['EVAL_GrainLength', 'EVAL_MaxGrainDelay', 'EVAL_Layers']
+eval_list = [
+    'EVAL_TempDensity',
+    'EVAL_GrainLength',
+    'EVAL_MaxGrainDelay',
+    'EVAL_Layers',
+]
 
 title_list = [
     'Pink noise: ' + r'$\Delta t = 1$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
     'Pink noise: ' + r'$\Delta t = 1$' + ' ms,  ' + r'$L = 250$' + ' ms',
-    'Pink noise: ' + r'$\Delta t = 5$' + ' ms,  ' + r'$L = 250$' + ' ms'
+    'Pink noise: ' + r'$\Delta t = 5$' + ' ms,  ' + r'$L = 250$' + ' ms',
+    'Pink noise: ' + r'$L = 250$' + ' ms,  ' + r'$Q = 5$' + ' sec.'
 ]
 
 scale = 2.5
-fig, axs = plt.subplots(ncols=3,
+fig, axs = plt.subplots(ncols=4,
                         nrows=2,
                         figsize=(6 * scale, 2 * scale),
                         sharex=True,
@@ -41,7 +50,7 @@ fig, axs = plt.subplots(ncols=3,
                             'wspace': 0.15,
                             'hspace': 0.15
                         })
-for eval_idx in range(3):
+for eval_idx in range(4):
     EVAL = eval_list[eval_idx]
 
     if EVAL == 'EVAL_MaxGrainDelay':
@@ -81,6 +90,19 @@ for eval_idx in range(3):
             'DiffuseFieldReference_BINAURAL.wav'
         ]
 
+    if EVAL == 'EVAL_TempDensity':
+        filelist = [
+            name +
+            '_L1_MaxGrainDelay_5000ms_DeltaT_1ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            name +
+            '_L1_MaxGrainDelay_5000ms_DeltaT_5ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            name +
+            '_L1_MaxGrainDelay_5000ms_DeltaT_20ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            name +
+            '_L1_MaxGrainDelay_5000ms_DeltaT_100ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            'DiffuseFieldReference_BINAURAL.wav'
+        ]
+
     #filelist.reverse()
     num_stimuli = len(filelist)
 
@@ -97,9 +119,6 @@ for eval_idx in range(3):
     IC = np.zeros((num_stimuli, num_bands))
     PowerSpectrum = np.zeros((num_stimuli, num_bands))
 
-    IACC_values = np.zeros((num_stimuli, num_blocks))
-    MagSpectrum = np.zeros((int(blocksize / 2 + 1), num_stimuli, num_blocks),
-                           dtype=complex)
     for idx in range(num_stimuli):
         filename = filelist[idx]
         fs, x = wavfile.read(pjoin(data_dir, filename))
@@ -107,8 +126,15 @@ for eval_idx in range(3):
         x_L = x[:, 0]
         x_R = x[:, 1]
 
-        IC[idx, :], PowerSpectrum[idx, :] = compute_IC_Welch(
-            x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize, num_blocks)
+        if 0:  #eval_idx < 3:
+            IC[idx, :], PowerSpectrum[idx, :] = compute_IC_Welch(
+                x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
+                num_blocks)
+        else:
+            IC[idx, :], PowerSpectrum[idx, :] = compute_IC(
+                x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
+                num_blocks)
+
         PowerSpectrum[idx, :] /= PowerSpectrum[
             idx, np.where(
                 f_c >= 2000)[0][0]]  # normalization at 2 kHz frequency band
@@ -119,6 +145,8 @@ for eval_idx in range(3):
         labels = ['Q = 5 ms', 'Q = 50 ms', 'Q = 500 ms', 'Q = 5 sec.', 'ref.']
     if EVAL == 'EVAL_Layers':
         labels = ['L1', 'L2', 'L3', 'ZEN', 'ref.']
+    if EVAL == 'EVAL_TempDensity':
+        labels = ['t = 1 ms', 't = 5 ms', 't = 20 ms', 't = 100 ms', 'ref.']
 
     dB_offsets = [3, 2, 1, 0, -1]
     cmap = matplotlib.cm.get_cmap('cool')
@@ -169,6 +197,8 @@ for eval_idx in range(3):
     axs[1, eval_idx].grid()
     if EVAL == 'EVAL_Layers':
         axs[0, eval_idx].legend(framealpha=1.0, loc='upper left')
+    elif EVAL == 'EVAL_TempDensity':
+        axs[0, eval_idx].legend(framealpha=1.0, loc='upper right')
     else:
         axs[0, eval_idx].legend(framealpha=1.0, loc='upper right')
 
