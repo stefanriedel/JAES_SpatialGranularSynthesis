@@ -13,6 +13,7 @@ def multichannelGranularSynthesis(x,
                                   num_channels,
                                   output_length,
                                   fs,
+                                  random,
                                   jitter=0,
                                   offset=0,
                                   gain=1):
@@ -46,11 +47,11 @@ def multichannelGranularSynthesis(x,
 
     t = 0
     while (t + L < N):
-        read_idx = np.random.randint(0, Q)
+        read_idx = random.integers(0, Q)
         grain = np.copy(x[(offset + read_idx):(offset + read_idx + L)])
         grain = grain * window
 
-        rand_dir_idx = np.random.randint(0, num_channels)
+        rand_dir_idx = random.integers(0, num_channels)
         y[t:(t + L), rand_dir_idx] += grain
 
         delta = delta_samples + int(
@@ -70,6 +71,7 @@ def binauralGranularSynthesis(x,
                               output_length,
                               fs,
                               hrir,
+                              random,
                               jitter=0,
                               offset=0,
                               gain=1):
@@ -95,7 +97,7 @@ def binauralGranularSynthesis(x,
     y = np.zeros((N, num_channels), dtype=float)
     Q = int(seed_range * fs)
     num_directions = int(hrir.shape[0])
-    hrir_samples = int(hrir.shape[2])
+    hrir_length = int(hrir.shape[2])
 
     L = int(grain_length * fs)
     window = hann_window(L)
@@ -104,14 +106,14 @@ def binauralGranularSynthesis(x,
 
     assert (Q < (x.size - L))
 
-    cL = L + hrir_samples - 1
+    cL = L + hrir_length - 1
     t = 0
     while (t + cL < N):
-        read_idx = np.random.randint(0, Q)
+        read_idx = random.integers(0, Q)
         grain = np.copy(x[(offset + read_idx):(offset + read_idx + L)])
         grain = grain * window
 
-        rand_dir_idx = np.random.randint(0, num_directions)
+        rand_dir_idx = random.integers(0, num_directions)
 
         y[t:(t + cL), 0] += signal.fftconvolve(grain, hrir[rand_dir_idx, 0, :])
         y[t:(t + cL), 1] += signal.fftconvolve(grain, hrir[rand_dir_idx, 1, :])

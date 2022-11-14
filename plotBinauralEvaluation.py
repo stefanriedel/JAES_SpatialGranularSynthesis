@@ -8,7 +8,7 @@ from Utility.interauralCoherence import compute_IC_Welch, compute_IC
 format = '.eps'
 
 # FIX LENGTHs of EVAL STIMULI, TempDensity only 2 sec. long
-num_blocks = 22
+#num_blocks = 22
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'BinauralEvaluationAudio')
@@ -35,11 +35,14 @@ eval_list = [
 ]
 
 title_list = [
-    'Pink noise: ' + r'$\Delta t = 1$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
-    'Pink noise: ' + r'$\Delta t = 1$' + ' ms,  ' + r'$L = 250$' + ' ms',
-    'Pink noise: ' + r'$\Delta t = 5$' + ' ms,  ' + r'$L = 250$' + ' ms',
-    'Pink noise: ' + r'$L = 250$' + ' ms,  ' + r'$Q = 5$' + ' sec.'
+    r'$L = 0.5$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
+    r'$\Delta t = 1$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
+    r'$\Delta t = 1$' + ' ms,  ' + r'$L = 250$' + ' ms',
+    r'$\Delta t = 5$' + ' ms,  ' + r'$L = 250$' + ' ms'
 ]
+
+IC = np.load(pjoin(utility_dir, 'IC.npy'))
+PowerSpectrum = np.load(pjoin(utility_dir, 'PowerSpectrum.npy'))
 
 scale = 2.5
 fig, axs = plt.subplots(ncols=4,
@@ -93,60 +96,27 @@ for eval_idx in range(4):
     if EVAL == 'EVAL_TempDensity':
         filelist = [
             name +
-            '_L1_MaxGrainDelay_5000ms_DeltaT_1ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_1ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
             name +
-            '_L1_MaxGrainDelay_5000ms_DeltaT_5ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_5ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
             name +
-            '_L1_MaxGrainDelay_5000ms_DeltaT_20ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_20ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
             name +
-            '_L1_MaxGrainDelay_5000ms_DeltaT_100ms_JitterPercent_1_GrainLength_250ms_BINAURAL_ANECHOEIC.wav',
+            '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_100ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
             'DiffuseFieldReference_BINAURAL.wav'
         ]
 
     #filelist.reverse()
     num_stimuli = len(filelist)
 
-    overlap = 1
-    hopsize = int(blocksize / overlap)
-
-    filename = filelist[0]
-    fs, x = wavfile.read(pjoin(data_dir, filename))
-    x = x / np.max(np.abs(x))
-    if (x[:, 0].shape[0] != x[:, 1].shape[0]):
-        assert ('left and right signals should be equal length')
-    num_blocks = int(np.floor(x.shape[0] / hopsize)) - 1
-
-    IC = np.zeros((num_stimuli, num_bands))
-    PowerSpectrum = np.zeros((num_stimuli, num_bands))
-
-    for idx in range(num_stimuli):
-        filename = filelist[idx]
-        fs, x = wavfile.read(pjoin(data_dir, filename))
-
-        x_L = x[:, 0]
-        x_R = x[:, 1]
-
-        if 0:  #eval_idx < 3:
-            IC[idx, :], PowerSpectrum[idx, :] = compute_IC_Welch(
-                x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
-                num_blocks)
-        else:
-            IC[idx, :], PowerSpectrum[idx, :] = compute_IC(
-                x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
-                num_blocks)
-
-        PowerSpectrum[idx, :] /= PowerSpectrum[
-            idx, np.where(
-                f_c >= 2000)[0][0]]  # normalization at 2 kHz frequency band
-
     if EVAL == 'EVAL_GrainLength':
-        labels = ['L = 0.5 ms', 'L = 2 ms', 'L = 10 ms', 'L = 250 ms', 'ref.']
+        labels = ['0.5 ms', '2 ms', '10 ms', '250 ms', 'ref.']
     if EVAL == 'EVAL_MaxGrainDelay':
-        labels = ['Q = 5 ms', 'Q = 50 ms', 'Q = 500 ms', 'Q = 5 sec.', 'ref.']
+        labels = ['5 ms', '50 ms', '500 ms', '5 sec.', 'ref.']
     if EVAL == 'EVAL_Layers':
         labels = ['L1', 'L2', 'L3', 'ZEN', 'ref.']
     if EVAL == 'EVAL_TempDensity':
-        labels = ['t = 1 ms', 't = 5 ms', 't = 20 ms', 't = 100 ms', 'ref.']
+        labels = ['1 ms', '5 ms', '20 ms', '100 ms', 'ref.']
 
     dB_offsets = [3, 2, 1, 0, -1]
     cmap = matplotlib.cm.get_cmap('cool')
@@ -160,27 +130,43 @@ for eval_idx in range(4):
 
     fs = 48000
     f = np.linspace(0, fs / 2, int(blocksize / 2 + 1))
+    if EVAL == 'EVAL_TempDensity':
+        axs[0, eval_idx].plot([], [], ' ', label=r'$\Delta t =$')
+        axs[1, eval_idx].plot([], [], ' ', label=r'$\Delta t =$')
+    if EVAL == 'EVAL_GrainLength':
+        axs[0, eval_idx].plot([], [], ' ', label=r'$L =$')
+        axs[1, eval_idx].plot([], [], ' ', label=r'$L =$')
+    if EVAL == 'EVAL_MaxGrainDelay':
+        axs[0, eval_idx].plot([], [], ' ', label=r'$Q =$')
+        axs[1, eval_idx].plot([], [], ' ', label=r'$Q =$')
+    if EVAL == 'EVAL_Layers':
+        axs[0, eval_idx].plot([], [], ' ', label='Layer:')
+        axs[1, eval_idx].plot([], [], ' ', label='Layer:')
+
     for idx in range(num_stimuli):
         # Plot interaural coherence of stimulus / 2D diffuse field reference
         axs[0, eval_idx].semilogx(f_c,
-                                  IC[idx, :],
+                                  IC[eval_idx, idx, :],
                                   label=labels[idx],
                                   color=colors[idx],
                                   ls=linestyles[idx],
                                   linewidth=1.5)
         # Plot spectrum difference between stimulus and 2D diffuse field reference
-        axs[1,
-            eval_idx].semilogx(f_c,
-                               10 * np.log10(np.abs(PowerSpectrum[idx, :])) -
-                               10 * np.log10(np.abs(PowerSpectrum[4, :])),
-                               label=labels[idx],
-                               color=colors[idx],
-                               ls=linestyles[idx],
-                               linewidth=1.5)
+        axs[1, eval_idx].semilogx(
+            f_c,
+            10 * np.log10(np.abs(PowerSpectrum[eval_idx, idx, :])) -
+            10 * np.log10(np.abs(PowerSpectrum[eval_idx, 4, :])),
+            label=labels[idx],
+            color=colors[idx],
+            ls=linestyles[idx],
+            linewidth=1.5)
 
     axs[0, eval_idx].set_xlim(50, 20000)
-    axs[0, eval_idx].set_ylim(0, 1)
+    axs[0, eval_idx].set_ylim(0, 1.1)
+    axs[0, eval_idx].set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    #axs[0, eval_idx].set_ylim(-0.1, 1)
     axs[0, 0].set_ylabel('Interaural Coherence')
+    #axs[0, 0].set_ylabel('IC Diff.')
     axs[0, eval_idx].set_title(title_list[eval_idx])
 
     axs[1, eval_idx].set_xlim(50, 20000)
@@ -196,12 +182,25 @@ for eval_idx in range(4):
     axs[0, eval_idx].grid()
     axs[1, eval_idx].grid()
     if EVAL == 'EVAL_Layers':
-        axs[0, eval_idx].legend(framealpha=1.0, loc='upper left')
+        axs[0, eval_idx].legend(framealpha=1.0,
+                                loc='upper left',
+                                handlelength=1.0)
     elif EVAL == 'EVAL_TempDensity':
-        axs[0, eval_idx].legend(framealpha=1.0, loc='upper right')
+        axs[0, eval_idx].legend(framealpha=1.0,
+                                loc='upper right',
+                                handlelength=1.0)
     else:
-        axs[0, eval_idx].legend(framealpha=1.0, loc='upper right')
+        axs[0, eval_idx].legend(framealpha=1.0,
+                                loc='upper right',
+                                handlelength=1.0)
 
+#plt.show(block=True)
+
+#ncol=6,
+#bbox_to_anchor=(0.5, 1.05),
+#columnspacing=0.4,
+#handletextpad=0.2,
+#borderpad=0.1,
 plt.savefig(fname=pjoin(save_dir, 'GranularEvaluationPlot' + format),
             bbox_inches='tight')
 print('done')
