@@ -59,7 +59,7 @@ def compute_IC_Welch(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
         ILD[b] = 10 * np.log10(P_l / P_r)
         P_L[b] = P_l
 
-    return IC, P_L
+    return IC, np.abs(ILD), P_L
 
 
 def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
@@ -112,4 +112,8 @@ def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
             ILD[t, b] = 10 * np.log10((P_l + eps) / (P_r + eps))
             P_L[t, b] = P_l
 
-    return np.mean(IC, axis=0), np.mean(P_L, axis=0)
+    IC_mean = np.mean(IC, axis=0)
+    ILD_mean = np.std((ILD), axis=0)
+    P_L_mean = np.mean(P_L, axis=0)
+
+    return IC_mean, ILD_mean, P_L_mean

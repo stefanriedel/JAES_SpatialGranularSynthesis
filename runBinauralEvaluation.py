@@ -42,6 +42,7 @@ for eval_idx in range(num_evaluations):
     num_stimuli = len(filelist)
 
     IC = np.zeros((num_stimuli, num_bands))
+    ILD = np.zeros((num_stimuli, num_bands))
     P_L = np.zeros((num_stimuli, num_bands))
 
     overlap = 1
@@ -61,20 +62,20 @@ for eval_idx in range(num_evaluations):
         x_L = x[:, 0]
         x_R = x[:, 1]
 
-        IC[st, :], P_L[st, :] = compute_IC(x_L, x_R, gammatone_mag_win, fs,
-                                           blocksize, hopsize, num_blocks)
+        IC[st, :], ILD[st, :], P_L[st, :] = compute_IC(x_L, x_R,
+                                                       gammatone_mag_win, fs,
+                                                       blocksize, hopsize,
+                                                       num_blocks)
 
         # normalization at 2 kHz frequency band
         P_L[st, :] /= P_L[st, np.where(f_c >= 2000)[0][0]]
 
     np.save(pjoin(save_dir, 'IC_' + EVAL + '.npy'), arr=IC)
+    np.save(pjoin(save_dir, 'ILD_' + EVAL + '.npy'), arr=ILD)
     np.save(pjoin(save_dir, 'P_L_' + EVAL + '.npy'), arr=P_L)
 
 # Compute evaluation on diffuse field reference
 EVAL = 'DiffuseField'
-
-IC = np.zeros(num_bands)
-P_L = np.zeros(num_bands)
 
 overlap = 1
 hopsize = int(blocksize / overlap)
@@ -91,13 +92,14 @@ fs, x = wavfile.read(pjoin(data_dir, filename))
 x_L = x[:, 0]
 x_R = x[:, 1]
 
-IC, P_L = compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
-                     num_blocks)
+IC, ILD, P_L = compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
+                          num_blocks)
 
 # normalization at 2 kHz frequency band
 P_L /= P_L[np.where(f_c >= 2000)[0][0]]
 
 np.save(pjoin(save_dir, 'IC_' + EVAL + '.npy'), arr=IC)
+np.save(pjoin(save_dir, 'ILD_' + EVAL + '.npy'), arr=ILD)
 np.save(pjoin(save_dir, 'P_L_' + EVAL + '.npy'), arr=P_L)
 
 print('done')

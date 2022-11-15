@@ -28,35 +28,38 @@ blocksize = 4096
 name = 'Pink'
 
 eval_list = [
-    'EVAL_GrainLength',
     'EVAL_TempDensity',
+    'EVAL_GrainLength',
     'EVAL_MaxGrainDelay',
     'EVAL_Layers',
 ]
 
 title_list = {
-    'EVAL_TempDensity': r'$L = 0.5$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
+    'EVAL_TempDensity': r'$L = 250$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
     'EVAL_GrainLength': r'$\Delta t = 1$' + ' ms,  ' + r'$Q = 5$' + ' sec.',
     'EVAL_MaxGrainDelay': r'$\Delta t = 1$' + ' ms,  ' + r'$L = 250$' + ' ms',
     'EVAL_Layers': r'$\Delta t = 5$' + ' ms,  ' + r'$L = 250$' + ' ms'
 }
 
 IC_DiffuseField = np.load(pjoin(data_dir, 'IC_DiffuseField.npy'))
+ILD_DiffuseField = np.load(pjoin(data_dir, 'ILD_DiffuseField.npy'))
 P_L_DiffuseField = np.load(pjoin(data_dir, 'P_L_DiffuseField.npy'))
 
 scale = 2.5
-fig, axs = plt.subplots(ncols=4,
-                        nrows=2,
-                        figsize=(6 * scale, 2 * scale),
-                        sharex=True,
-                        gridspec_kw={
-                            'wspace': 0.15,
-                            'hspace': 0.15
-                        })
+fig, axs = plt.subplots(
+    ncols=4,
+    nrows=3,  #nrows=2,
+    figsize=(6 * scale, 2.5 * scale),  #figsize=(6 * scale, 2 * scale),
+    sharex=True,
+    gridspec_kw={
+        'wspace': 0.15,
+        'hspace': 0.15
+    })
 for eval_idx in range(4):
     EVAL = eval_list[eval_idx]
 
     IC = np.load(pjoin(data_dir, 'IC_' + EVAL + '.npy'))
+    ILD = np.load(pjoin(data_dir, 'ILD_' + EVAL + '.npy'))
     P_L = np.load(pjoin(data_dir, 'P_L_' + EVAL + '.npy'))
 
     num_stimuli = IC.shape[0]
@@ -119,6 +122,13 @@ for eval_idx in range(4):
                                   color=colors[idx],
                                   ls=linestyles[idx],
                                   linewidth=1.5)
+        # Plot mean abs ILD of stimulus
+        axs[2, eval_idx].semilogx(f_c,
+                                  ILD[idx, :],
+                                  label=labels[idx],
+                                  color=colors[idx],
+                                  ls=linestyles[idx],
+                                  linewidth=1.5)
     # Plot interaural coherence of 2D diffuse field reference
     axs[0, eval_idx].semilogx(f_c,
                               IC_DiffuseField,
@@ -134,9 +144,16 @@ for eval_idx in range(4):
                               color=colors[-1],
                               ls=linestyles[-1],
                               linewidth=1.5)
+    # Plot mean abs ILD of stimulus
+    axs[2, eval_idx].semilogx(f_c,
+                              ILD_DiffuseField,
+                              label=labels[-1],
+                              color=colors[-1],
+                              ls=linestyles[-1],
+                              linewidth=1.5)
 
     axs[0, eval_idx].set_xlim(50, 20000)
-    axs[0, eval_idx].set_ylim(0, 1.4)
+    axs[0, eval_idx].set_ylim(0, 1.05)
     axs[0, eval_idx].set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
     axs[0, 0].set_ylabel('Interaural Coherence')
     axs[0, eval_idx].set_title(title_list[EVAL])
@@ -146,12 +163,25 @@ for eval_idx in range(4):
     axs[1, eval_idx].set_yticks([-12, -9, -6, -3, 0, 3, 6, 9, 12])
 
     axs[1, 0].set_ylabel('Spectral Diff. in dB')
-    axs[1, eval_idx].set_xlabel('Frequency in Hz')
+
+    axs[2, eval_idx].set_yticks([0, 3, 6, 9, 12])
+    axs[2, eval_idx].set_ylim(0, 12)
+    axs[2, 0].set_ylabel('std(ILD) in dB')
+    axs[2, eval_idx].set_xlabel('Frequency in Hz')
 
     axs[0, eval_idx].grid()
     axs[1, eval_idx].grid()
+    axs[2, eval_idx].grid()
+    """axs[0, eval_idx].legend(framealpha=1.0,
+                            loc='upper left',
+                            bbox_to_anchor=(-0.02, 1.03),
+                            ncol=3,
+                            handlelength=1.0,
+                            handletextpad=0.05,
+                            columnspacing=0.9,
+                            labelspacing=0.05)"""
 
-    axs[0, eval_idx].legend(framealpha=1.0,
+    axs[1, eval_idx].legend(framealpha=1.0,
                             loc='upper left',
                             bbox_to_anchor=(-0.02, 1.03),
                             ncol=3,
@@ -159,18 +189,6 @@ for eval_idx in range(4):
                             handletextpad=0.05,
                             columnspacing=0.9,
                             labelspacing=0.05)
-    """if EVAL == 'EVAL_Layers':
-        axs[1, eval_idx].legend(framealpha=1.0,
-                                loc='upper left',
-                                handlelength=1.0)
-    elif EVAL == 'EVAL_TempDensity':
-        axs[1, eval_idx].legend(framealpha=1.0,
-                                loc='upper left',
-                                handlelength=1.0)
-    else:
-        axs[0, eval_idx].legend(framealpha=1.0,
-                                loc='upper right',
-                                handlelength=1.0)"""
 
 plt.savefig(fname=pjoin(save_dir, 'GranularEvaluationPlot' + format),
             bbox_inches='tight')

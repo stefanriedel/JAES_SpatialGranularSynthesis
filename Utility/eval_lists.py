@@ -18,9 +18,9 @@ eval_file_lists = {
         '_ZEN_MaxGrainDelay_5000ms_DeltaT_5ms_JitterPercent_0_GrainLength_250ms_BINAURAL.wav',
     ],
     'EVAL_TempDensity': [
-        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_1ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
-        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_5ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
-        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_20ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
-        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_100ms_JitterPercent_0_GrainLength_0ms_BINAURAL.wav',
+        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_1ms_JitterPercent_0_GrainLength_250ms_BINAURAL.wav',
+        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_5ms_JitterPercent_0_GrainLength_250ms_BINAURAL.wav',
+        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_20ms_JitterPercent_0_GrainLength_250ms_BINAURAL.wav',
+        '_Uniform_2D_MaxGrainDelay_5000ms_DeltaT_100ms_JitterPercent_0_GrainLength_250ms_BINAURAL.wav',
     ]
 }
