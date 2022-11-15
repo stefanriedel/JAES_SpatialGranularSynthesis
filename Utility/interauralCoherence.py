@@ -87,10 +87,6 @@ def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
     ILD = np.zeros((num_blocks, num_bands))
     P_L = np.zeros((num_blocks, num_bands))
     for t in range(num_blocks):
-        #cross_spectrum = np.zeros(int(blocksize / 2 + 1), dtype=complex)
-        #auto_spectrum_L = np.zeros(int(blocksize / 2 + 1), dtype=complex)
-        #auto_spectrum_R = np.zeros(int(blocksize / 2 + 1), dtype=complex)
-
         x_L_block = x_L[t * hopsize:(t * hopsize + blocksize)]
         x_R_block = x_R[t * hopsize:(t * hopsize + blocksize)]
 
@@ -113,7 +109,7 @@ def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
 
             IC[t, b] = (np.max(np.abs(cross_correlation[tau_range])) +
                         eps) / np.sqrt((P_l + eps) * (P_r + eps))
-            ILD[t, b] = 10 * np.log10(P_l / P_r)
+            ILD[t, b] = 10 * np.log10((P_l + eps) / (P_r + eps))
             P_L[t, b] = P_l
 
     return np.mean(IC, axis=0), np.mean(P_L, axis=0)
