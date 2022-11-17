@@ -113,8 +113,8 @@ def compute_auditory_cues(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
             IC[t, b] = (np.max(np.abs(cross_correlation[tau_range])) +
                         eps) / np.sqrt((P_l + eps) * (P_r + eps))
             ILD[t, b] = 10 * np.log10((P_l + eps) / (P_r + eps))
-            ITD[t, b] = (np.argmax(np.abs(cross_correlation[tau_range])) /
-                         fs) - tau_limit
+            ITD[t,
+                b] = (np.argmax(cross_correlation[tau_range]) / fs) - tau_limit
             P_L[t, b] = P_l
 
     return IC, ITD, ILD, P_L
