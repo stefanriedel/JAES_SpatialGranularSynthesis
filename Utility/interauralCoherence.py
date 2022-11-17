@@ -62,9 +62,11 @@ def compute_IC_Welch(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
     return IC, np.abs(ILD), P_L
 
 
-def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
-               num_blocks):
-    """ Compute time-average of interaural coherence (IC) and monaural ear spectrum.
+def compute_auditory_cues(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
+                          num_blocks):
+    """ Compute per block: interaural coherence (IC), interaural time differences (ITD),
+    interaural level difference (ILD), and monaural spectrum.
+     and monaural ear spectrum.
     Args:
         x_L (ndarray): left-ear input signal in time-domain
         x_R (ndarray): right-ear input signal in time-domain
@@ -85,6 +87,7 @@ def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
 
     IC = np.zeros((num_blocks, num_bands))
     ILD = np.zeros((num_blocks, num_bands))
+    ITD = np.zeros((num_blocks, num_bands))
     P_L = np.zeros((num_blocks, num_bands))
     for t in range(num_blocks):
         x_L_block = x_L[t * hopsize:(t * hopsize + blocksize)]
@@ -110,10 +113,8 @@ def compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
             IC[t, b] = (np.max(np.abs(cross_correlation[tau_range])) +
                         eps) / np.sqrt((P_l + eps) * (P_r + eps))
             ILD[t, b] = 10 * np.log10((P_l + eps) / (P_r + eps))
+            ITD[t, b] = (np.argmax(np.abs(cross_correlation[tau_range])) /
+                         fs) - tau_limit
             P_L[t, b] = P_l
 
-    IC_mean = np.mean(IC, axis=0)
-    ILD_mean = np.std((ILD), axis=0)
-    P_L_mean = np.mean(P_L, axis=0)
-
-    return IC_mean, ILD_mean, P_L_mean
+    return IC, ITD, ILD, P_L

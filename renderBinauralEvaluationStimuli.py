@@ -33,7 +33,7 @@ EVAL_MaxGrainDelay = True
 EVAL_Layers = True
 EVAL_TempDensity = True
 
-RENDER_DIFFUSE_REF = True  # only enable once to render the ref. file
+RENDER_DIFFUSE_REF = False  # only enable once to render the ref. file
 
 maximum_grain_delays = []
 grain_lengths = []
@@ -55,7 +55,7 @@ if EVAL_Layers:
     maximum_grain_delays += [5] * num_cond
     grain_lengths += [0.250] * num_cond
     temporal_densities += [0.005] * num_cond
-    angular_distributions += ['L1', 'L2', 'L3', 'ZEN']
+    angular_distributions += ['L1', 'L2', 'L3', 'SP']
 if EVAL_TempDensity:
     maximum_grain_delays += [5] * num_cond
     grain_lengths += [0.250] * num_cond

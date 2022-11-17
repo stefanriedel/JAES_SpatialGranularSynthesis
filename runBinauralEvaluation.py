@@ -3,10 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import wavfile
 from os.path import dirname, join as pjoin
-from Utility.interauralCoherence import compute_IC_Welch, compute_IC
+from Utility.interauralCoherence import compute_IC_Welch, compute_auditory_cues
 from Utility.eval_lists import eval_file_lists
-
-format = '.eps'
 
 root_dir = dirname(__file__)
 data_dir = pjoin(root_dir, 'BinauralEvaluationAudio')
@@ -27,10 +25,7 @@ blocksize = 4096
 name = 'Pink'
 
 eval_list = [
-    'EVAL_TempDensity',
-    'EVAL_GrainLength',
-    'EVAL_MaxGrainDelay',
-    'EVAL_Layers',
+    'EVAL_Layers', 'EVAL_TempDensity', 'EVAL_GrainLength', 'EVAL_MaxGrainDelay'
 ]
 
 num_evaluations = len(eval_list)
@@ -43,6 +38,7 @@ for eval_idx in range(num_evaluations):
 
     IC = np.zeros((num_stimuli, num_bands))
     ILD = np.zeros((num_stimuli, num_bands))
+    ITD = np.zeros((num_stimuli, num_bands))
     P_L = np.zeros((num_stimuli, num_bands))
 
     overlap = 1
@@ -62,16 +58,20 @@ for eval_idx in range(num_evaluations):
         x_L = x[:, 0]
         x_R = x[:, 1]
 
-        IC[st, :], ILD[st, :], P_L[st, :] = compute_IC(x_L, x_R,
-                                                       gammatone_mag_win, fs,
-                                                       blocksize, hopsize,
-                                                       num_blocks)
+        IC_tf, ITD_tf, ILD_tf, P_L_tf = compute_auditory_cues(
+            x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize, num_blocks)
 
+        # reduce to specific statistics
+        IC[st, :] = np.mean(IC_tf, axis=0)
+        ITD[st, :] = np.std(ITD_tf, axis=0)
+        ILD[st, :] = np.std(ILD_tf, axis=0)
+        P_L[st, :] = np.mean(P_L_tf, axis=0)
         # normalization at 2 kHz frequency band
         P_L[st, :] /= P_L[st, np.where(f_c >= 2000)[0][0]]
 
     np.save(pjoin(save_dir, 'IC_' + EVAL + '.npy'), arr=IC)
     np.save(pjoin(save_dir, 'ILD_' + EVAL + '.npy'), arr=ILD)
+    np.save(pjoin(save_dir, 'ITD_' + EVAL + '.npy'), arr=ITD)
     np.save(pjoin(save_dir, 'P_L_' + EVAL + '.npy'), arr=P_L)
 
 # Compute evaluation on diffuse field reference
@@ -92,14 +92,22 @@ fs, x = wavfile.read(pjoin(data_dir, filename))
 x_L = x[:, 0]
 x_R = x[:, 1]
 
-IC, ILD, P_L = compute_IC(x_L, x_R, gammatone_mag_win, fs, blocksize, hopsize,
-                          num_blocks)
+IC_tf, ITD_tf, ILD_tf, P_L_tf = compute_auditory_cues(x_L, x_R,
+                                                      gammatone_mag_win, fs,
+                                                      blocksize, hopsize,
+                                                      num_blocks)
 
+# reduce to specific statistics
+IC = np.mean(IC_tf, axis=0)
+ITD = np.std(ITD_tf, axis=0)
+ILD = np.std(ILD_tf, axis=0)
+P_L = np.mean(P_L_tf, axis=0)
 # normalization at 2 kHz frequency band
 P_L /= P_L[np.where(f_c >= 2000)[0][0]]
 
 np.save(pjoin(save_dir, 'IC_' + EVAL + '.npy'), arr=IC)
 np.save(pjoin(save_dir, 'ILD_' + EVAL + '.npy'), arr=ILD)
+np.save(pjoin(save_dir, 'ITD_' + EVAL + '.npy'), arr=ITD)
 np.save(pjoin(save_dir, 'P_L_' + EVAL + '.npy'), arr=P_L)
 
 print('done')

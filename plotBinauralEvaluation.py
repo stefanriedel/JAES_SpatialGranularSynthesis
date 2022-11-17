@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.io import wavfile
 from os.path import dirname, join as pjoin
-from Utility.interauralCoherence import compute_IC_Welch, compute_IC
 
 format = '.pdf'
 
@@ -42,23 +41,26 @@ title_list = {
 }
 
 IC_DiffuseField = np.load(pjoin(data_dir, 'IC_DiffuseField.npy'))
+ITD_DiffuseField = np.load(pjoin(data_dir, 'ITD_DiffuseField.npy'))
 ILD_DiffuseField = np.load(pjoin(data_dir, 'ILD_DiffuseField.npy'))
 P_L_DiffuseField = np.load(pjoin(data_dir, 'P_L_DiffuseField.npy'))
 
 scale = 2.5
+gs_kw = dict(width_ratios=[1, 1, 1, 1],
+             height_ratios=[1, 0.5, 0.5, 1],
+             wspace=0.2,
+             hspace=0.2)
 fig, axs = plt.subplots(
     ncols=4,
-    nrows=3,  #nrows=2,
+    nrows=4,  #nrows=2,
     figsize=(6 * scale, 2.5 * scale),  #figsize=(6 * scale, 2 * scale),
     sharex=True,
-    gridspec_kw={
-        'wspace': 0.15,
-        'hspace': 0.15
-    })
+    gridspec_kw=gs_kw)
 for eval_idx in range(4):
     EVAL = eval_list[eval_idx]
 
     IC = np.load(pjoin(data_dir, 'IC_' + EVAL + '.npy'))
+    ITD = np.load(pjoin(data_dir, 'ITD_' + EVAL + '.npy'))
     ILD = np.load(pjoin(data_dir, 'ILD_' + EVAL + '.npy'))
     P_L = np.load(pjoin(data_dir, 'P_L_' + EVAL + '.npy'))
 
@@ -70,41 +72,30 @@ for eval_idx in range(4):
     linestyles = ['-', '--', '-', ':', '-']
 
     if EVAL == 'EVAL_Layers':
-        colors = [cmap(0.2), cmap(0.6), cmap(0.8), 'k', 'k']
-        linestyles = ['-', '--', '-', ':', '-']
+        colors = [cmap(0.2), cmap(0.6), cmap(0.8), cmap(0.4), 'k', 'k']
+        linestyles = ['-', '--', '-', '-', ':', '-']
         dB_offsets = [3, 2, 1, 0, -1]
 
     fs = 48000
     f = np.linspace(0, fs / 2, int(blocksize / 2 + 1))
 
     if EVAL == 'EVAL_TempDensity':
-        #labels = ['1 ms', '5 ms', '20 ms', '100 ms', 'ref.']
-        #axs[0, eval_idx].plot([], [], ' ', label=r'$\Delta t =$')
-        #axs[1, eval_idx].plot([], [], ' ', label=r'$\Delta t =$')
         labels = [
             r'$\Delta t = 1$' + ' ms', r'$\Delta t = 5$' + ' ms',
             r'$\Delta t = 20$' + ' ms', r'$\Delta t = 100$' + ' ms', 'ref.'
         ]
     if EVAL == 'EVAL_GrainLength':
-        #labels = ['0.5 ms', '2 ms', '10 ms', '250 ms', 'ref.']
-        #axs[0, eval_idx].plot([], [], ' ', label=r'$L =$')
-        #axs[1, eval_idx].plot([], [], ' ', label=r'$L =$')
         labels = [
             r'$L = 0.5$' + ' ms', r'$L = 2$' + ' ms', r'$L = 10$' + ' ms',
             r'$L = 250$' + ' ms', 'ref.'
         ]
     if EVAL == 'EVAL_MaxGrainDelay':
-        #labels = ['5 ms', '50 ms', '500 ms', '5 sec.', 'ref.']
-        #axs[0, eval_idx].plot([], [], ' ', label=r'$Q =$')
-        #axs[1, eval_idx].plot([], [], ' ', label=r'$Q =$')
         labels = [
             r'$Q = 5$' + ' ms', r'$Q = 50$' + ' ms', r'$Q = 500$' + ' ms',
             r'$Q = 5$' + ' sec.', 'ref.'
         ]
     if EVAL == 'EVAL_Layers':
-        labels = ['L1', 'L2', 'L3', 'ZEN', 'ref.']
-        #axs[0, eval_idx].plot([], [], ' ', label='Layer:')
-        #axs[1, eval_idx].plot([], [], ' ', label='Layer:')
+        labels = ['L1', 'L2', 'L3', 'SP', 'ZEN', 'ref.']
 
     for idx in range(num_stimuli):
         # Plot interaural coherence of stimulus
@@ -115,14 +106,21 @@ for eval_idx in range(4):
                                   ls=linestyles[idx],
                                   linewidth=1.5)
         # Plot spectrum difference between stimulus
-        axs[1, eval_idx].semilogx(f_c,
+        axs[3, eval_idx].semilogx(f_c,
                                   10 * np.log10(np.abs(P_L[idx, :])) -
                                   10 * np.log10(np.abs(P_L_DiffuseField)),
                                   label=labels[idx],
                                   color=colors[idx],
                                   ls=linestyles[idx],
                                   linewidth=1.5)
-        # Plot mean abs ILD of stimulus
+        # Plot ITD of stimulus
+        axs[1, eval_idx].semilogx(f_c,
+                                  ITD[idx, :],
+                                  label=labels[idx],
+                                  color=colors[idx],
+                                  ls=linestyles[idx],
+                                  linewidth=1.5)
+        # Plot ILD of stimulus
         axs[2, eval_idx].semilogx(f_c,
                                   ILD[idx, :],
                                   label=labels[idx],
@@ -137,14 +135,21 @@ for eval_idx in range(4):
                               ls=linestyles[-1],
                               linewidth=1.5)
     # Plot spectrum difference (zero line)
-    axs[1, eval_idx].semilogx(f_c,
+    axs[3, eval_idx].semilogx(f_c,
                               10 * np.log10(np.abs(P_L_DiffuseField)) -
                               10 * np.log10(np.abs(P_L_DiffuseField)),
                               label=labels[-1],
                               color=colors[-1],
                               ls=linestyles[-1],
                               linewidth=1.5)
-    # Plot mean abs ILD of stimulus
+    # Plot ITD of ref
+    axs[1, eval_idx].semilogx(f_c,
+                              ITD_DiffuseField,
+                              label=labels[-1],
+                              color=colors[-1],
+                              ls=linestyles[-1],
+                              linewidth=1.5)
+    # Plot ILD of ref
     axs[2, eval_idx].semilogx(f_c,
                               ILD_DiffuseField,
                               label=labels[-1],
@@ -155,23 +160,37 @@ for eval_idx in range(4):
     axs[0, eval_idx].set_xlim(50, 20000)
     axs[0, eval_idx].set_ylim(0, 1.05)
     axs[0, eval_idx].set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    axs[0, 0].set_ylabel('Interaural Coherence')
+    axs[0, 0].set_ylabel(r'$\overline{\mathrm{IC}}$', fontsize=11)
+    #axs[0, 0].set_ylabel('Mean IC', fontsize=12)
     axs[0, eval_idx].set_title(title_list[EVAL])
 
-    axs[1, eval_idx].set_xlim(50, 20000)
-    axs[1, eval_idx].set_ylim(-12, 12)
-    axs[1, eval_idx].set_yticks([-12, -9, -6, -3, 0, 3, 6, 9, 12])
+    axs[3, eval_idx].set_xlim(50, 20000)
+    axs[3, eval_idx].set_ylim(-9, 9)
+    axs[3, eval_idx].set_yticks([-9, -9, -6, -3, 0, 3, 6, 9, 9])
 
-    axs[1, 0].set_ylabel('Spectral Diff. in dB')
+    #axs[1, 0].set_ylabel('Mean Spectral Diff. [dB]')
 
-    axs[2, eval_idx].set_yticks([0, 3, 6, 9, 12])
-    axs[2, eval_idx].set_ylim(0, 12)
-    axs[2, 0].set_ylabel('std(ILD) in dB')
-    axs[2, eval_idx].set_xlabel('Frequency in Hz')
+    #axs[1, eval_idx].set_yticks([0, 3, 6, 9, 12])
+    #axs[1, eval_idx].set_ylim(0, 12)
+    axs[1, eval_idx].set_yticks([0, 0.0005, 0.001])
+    axs[1, eval_idx].set_yticklabels(['0', '0.5', '1'])
+    axs[1, eval_idx].set_ylim(-0.5e-4, 0.001)
+    axs[1, 0].set_ylabel(r'$\mathrm{ITD}_\mathrm{SD}$' + ' [ms]', fontsize=11)
+
+    axs[2, eval_idx].set_yticks([0, 3, 6, 9])
+    axs[2, eval_idx].set_ylim(-0.5, 9)
+    axs[2, 0].set_ylabel(r'$\mathrm{ILD}_\mathrm{SD}$' + ' [dB]', fontsize=11)
+
+    axs[3, 0].set_ylabel(
+        r'$\overline{\xi_\mathrm{L}} - \overline{\xi_\mathrm{L,ref}}$' +
+        ' [dB]',
+        fontsize=11)
+    axs[3, eval_idx].set_xlabel('Frequency in Hz', fontsize=11)
 
     axs[0, eval_idx].grid()
     axs[1, eval_idx].grid()
     axs[2, eval_idx].grid()
+    axs[3, eval_idx].grid()
     """axs[0, eval_idx].legend(framealpha=1.0,
                             loc='upper left',
                             bbox_to_anchor=(-0.02, 1.03),
@@ -181,7 +200,7 @@ for eval_idx in range(4):
                             columnspacing=0.9,
                             labelspacing=0.05)"""
 
-    axs[1, eval_idx].legend(framealpha=1.0,
+    axs[3, eval_idx].legend(framealpha=1.0,
                             loc='upper left',
                             bbox_to_anchor=(-0.02, 1.03),
                             ncol=3,
