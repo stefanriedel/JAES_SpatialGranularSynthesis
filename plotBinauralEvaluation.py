@@ -177,7 +177,8 @@ for eval_idx in range(4):
     axs[1, eval_idx].set_ylim(-0.5e-4, 0.001)
     axs[1, 0].set_ylabel(r'$\mathrm{ITD}_\mathrm{SD}$' + ' [ms]', fontsize=11)
 
-    axs[2, eval_idx].set_yticks([0, 3, 6, 9])
+    axs[2, eval_idx].set_yticks([0, 1, 2, 3, 6, 9])
+    axs[2, eval_idx].set_yticklabels(['   0', '', '', '3', '6', '9'])
     axs[2, eval_idx].set_ylim(-0.5, 9)
     axs[2, 0].set_ylabel(r'$\mathrm{ILD}_\mathrm{SD}$' + ' [dB]', fontsize=11)
 
