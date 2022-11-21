@@ -26,6 +26,7 @@ def multichannelGranularSynthesis(x,
         num_channels (int): number of output channels
         output_length (float): length of the synthesis output in sec.
         fs (float): sample rate in Hz
+        random (generator): random number generator object
         jitter (float): relative jitter amount in percent, default = 0.0
         offset (int): sample read offset, default = 0
         gain (float): output gain, default = 1.0
@@ -84,6 +85,8 @@ def binauralGranularSynthesis(x,
         num_channels (int): number of output channels
         output_length (float): length of the synthesis output in sec.
         fs (float): sample rate in Hz
+        hrir (ndarray): head-related impulse response subset
+        random (generator): random number generator object
         jitter (float): relative jitter amount in percent, default = 0.0
         offset (int): sample read offset, default = 0
         gain (float): output gain, default = 1.0

@@ -53,7 +53,7 @@ gs_kw = dict(width_ratios=[1, 1, 1, 1],
 fig, axs = plt.subplots(
     ncols=4,
     nrows=4,  #nrows=2,
-    figsize=(6 * scale, 2.5 * scale),  #figsize=(6 * scale, 2 * scale),
+    figsize=(6 * scale, 3 * scale),  #figsize=(6 * scale, 2 * scale),
     sharex=True,
     gridspec_kw=gs_kw)
 for eval_idx in range(4):
@@ -160,7 +160,7 @@ for eval_idx in range(4):
     axs[0, eval_idx].set_xlim(50, 20000)
     axs[0, eval_idx].set_ylim(0, 1.05)
     axs[0, eval_idx].set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    axs[0, 0].set_ylabel(r'$\overline{\mathrm{IC}}$', fontsize=11)
+    axs[0, 0].set_ylabel(r'$\overline{\mathrm{IC}}$', fontsize=12)
     #axs[0, 0].set_ylabel('Mean IC', fontsize=12)
     axs[0, eval_idx].set_title(title_list[EVAL])
 
@@ -175,18 +175,21 @@ for eval_idx in range(4):
     axs[1, eval_idx].set_yticks([0, 0.0005, 0.001])
     axs[1, eval_idx].set_yticklabels(['0', '0.5', '1'])
     axs[1, eval_idx].set_ylim(-0.5e-4, 0.001)
-    axs[1, 0].set_ylabel(r'$\mathrm{ITD}_\mathrm{SD}$' + ' [ms]', fontsize=11)
+    axs[1,
+        0].set_ylabel(r'$\sigma(\mathrm{ITD}) \, \mathrm{in} \, \mathrm{ms}$',
+                      fontsize=12)
 
-    axs[2, eval_idx].set_yticks([0, 1, 2, 3, 6, 9])
-    axs[2, eval_idx].set_yticklabels(['   0', '', '', '3', '6', '9'])
-    axs[2, eval_idx].set_ylim(-0.5, 9)
-    axs[2, 0].set_ylabel(r'$\mathrm{ILD}_\mathrm{SD}$' + ' [dB]', fontsize=11)
+    axs[2, eval_idx].set_yticks([0, 1, 2, 3, 6])
+    axs[2, eval_idx].set_yticklabels(['   0', '', '', '3', '6'])
+    axs[2, eval_idx].set_ylim(-0.5, 6)
+    axs[2,
+        0].set_ylabel(r'$\sigma(\mathrm{ILD}) \, \mathrm{in} \, \mathrm{dB}$',
+                      fontsize=12)
 
     axs[3, 0].set_ylabel(
-        r'$\overline{\xi_\mathrm{L}} - \overline{\xi_\mathrm{L,ref}}$' +
-        ' [dB]',
-        fontsize=11)
-    axs[3, eval_idx].set_xlabel('Frequency in Hz', fontsize=11)
+        r'$\overline{\xi_\mathrm{L}} - \overline{\xi_\mathrm{L,ref}}  \, \, \mathrm{in} \, \mathrm{dB}$',
+        fontsize=12)
+    axs[3, eval_idx].set_xlabel('Frequency in Hz', fontsize=12)
 
     axs[0, eval_idx].grid()
     axs[1, eval_idx].grid()
@@ -207,7 +210,7 @@ for eval_idx in range(4):
                             ncol=3,
                             handlelength=1.0,
                             handletextpad=0.05,
-                            columnspacing=0.9,
+                            columnspacing=0.7,
                             labelspacing=0.05)
 
 plt.savefig(fname=pjoin(save_dir, 'GranularEvaluationPlot' + format),
