@@ -36,7 +36,7 @@ if sound == 'Pink':
 
 # Select the type of output you want to save to your disk:
 RENDER_MULTICHANNEL_STIMULI = False
-RENDER_BINAURAL_BRIR_STIMULI = False
+#RENDER_BINAURAL_BRIR_STIMULI = False
 RENDER_BINAURAL_ANECHOEIC_STIMULI = True
 
 EXP1_STIMULI = True
@@ -56,12 +56,6 @@ if EXP2_STIMULI:
 parameters = list(
     itertools.product(seed_range, grain_lengths, temporal_densities, subset))
 num_stimuli = len(parameters)
-"""[seed_range, grain_lengths, temporal_densities, subset] = parameter_lists
-parameter_lists = [grain_lengths, temporal_densities, subset, seed_range]
-num_stimuli = len(parameter_lists[0])
-for l in parameter_lists:
-    if num_stimuli != len(l):
-        raise ValueError('not all parameter lists have same length!')"""
 
 if RENDER_BINAURAL_ANECHOEIC_STIMULI:
     # Load the 2D HRIR set of the KU100 dummy head
@@ -146,8 +140,7 @@ def mainLoopRendering(idx):
                             1000)) + 'ms_' + binaural_string + '.wav'
         output_path = pjoin(save_dir, output_filename)
         soundfile.write(output_path, y_binaural, fs)
-
-    if RENDER_BINAURAL_BRIR_STIMULI:
+    """if RENDER_BINAURAL_BRIR_STIMULI:
         hrir_l, hrir_r, num_channels = getHRIR_ChannelSubset(
             angular_distribution, hrir_2D, hrir_3D)
         y_binaural = renderBinaural(Y, hrir_l, hrir_r, output_gain)
@@ -157,7 +150,7 @@ def mainLoopRendering(idx):
                     int(jitter * 100.0)) + '_GrainLength_' + str(
                         int(grain_length * 1000)) + 'ms_BINAURAL_BRIR.wav'
         output_path = pjoin(save_dir, output_filename)
-        soundfile.write(output_path, y_binaural, fs)
+        soundfile.write(output_path, y_binaural, fs)"""
 
     print('File being saved to .\ExperimentStimuliAudio now. \n')
 
