@@ -43,7 +43,11 @@ def getLoudspeaker_ChannelSubset(angular_distribution):
     return azi_ele, num_channels
 
 
-def getHRIR_ChannelSubset(angular_distribution, hrir_2D, hrir_3D):
+def getHRIR_ChannelSubset(angular_distribution,
+                          hrir_2D,
+                          hrir_3D,
+                          hrir_2D_coord=None,
+                          hrir_3D_coord=None):
     root_dir = dirname(__file__)
 
     L1_idcs = np.load(pjoin(root_dir, 'L1_idcs_FULL2DEG.npy'))
