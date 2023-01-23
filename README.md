@@ -1,5 +1,5 @@
 # ActaAcustica_SpatialGranularSynthesis
-This repository hosts python code and data of the publication 'Perceptual Evaluation of Envelopment and Engulfment using Spatial Granular Synthesis'.
+This repository hosts python code and data of the publication 'Perceptual evaluation of listener envelopment using spatial granular synthesis'.
 
 Dependencies:
 * numpy
