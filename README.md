@@ -1,5 +1,5 @@
 # JAES_SpatialGranularSynthesis
-This repository hosts python code and data of the publication 'Perceptual evaluation of listener envelopment using spatial granular synthesis'.
+This repository hosts python code and data of the publication 'The Effect of Temporal and Directional Density on Listener Envelopment'.
 
 Dependencies:
 * numpy
