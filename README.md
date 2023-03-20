@@ -7,7 +7,8 @@ Dependencies:
 * matplotlib
 * soundfile
 * joblib
-Optional to render 'ConcretPH' / 'Vocal' sound stimuli:
+
+Optionally to render 'ConcretPH' / 'Vocal' sound stimuli:
 * youtube_dl
 * requests
 
