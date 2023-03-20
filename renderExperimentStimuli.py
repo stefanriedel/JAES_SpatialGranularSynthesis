@@ -8,7 +8,6 @@ from spatialGranularSynthesis import multichannelGranularSynthesis, binauralGran
 from joblib import Parallel, delayed
 import soundfile
 import itertools
-from Utility.DEQ import compute_deq, apply_deq
 
 root_dir = dirname(__file__)
 save_dir = pjoin(root_dir, 'ExperimentStimuliAudio')
@@ -93,21 +92,12 @@ if RENDER_BINAURAL_ANECHOEIC_STIMULI:
     hrir_l_2D = hrir_2D[:, 0, :]
     hrir_r_2D = hrir_2D[:, 1, :]
 
-    DEQ = False
-    if DEQ:
-        deq_ir_l, deq_ir_r = compute_deq(hrir_l_2D, hrir_r_2D, 4096, 48000)
-
     # Load the 3D HRIR set of the KU100 dummy head
     hrir_3D_dataset = np.load(file='./Utility/HRIR_FULL2DEG_48kHz.npy',
                               allow_pickle=True)
     hrir_3D = hrir_3D_dataset[0]
     hrir_l_3D = hrir_3D[:, 0, :]
     hrir_r_3D = hrir_3D[:, 1, :]
-
-    if DEQ:
-        hrir_l_3D, hrir_r_3D = apply_deq(hrir_l_3D, hrir_r_3D, deq_ir_l,
-                                         deq_ir_r, 4096, 48000)
-        hrir_3D = np.stack((hrir_l_3D, hrir_r_3D), axis=1)
 
 
 def renderBinaural(Y, hrir_l, hrir_r, gain=1.0):
