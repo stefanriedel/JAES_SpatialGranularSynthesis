@@ -4,7 +4,7 @@ import numpy as np
 from scipy.io import wavfile
 from os.path import dirname, join as pjoin
 
-format = '.eps'
+format = '.pdf'
 
 # FIX LENGTHs of EVAL STIMULI, TempDensity only 2 sec. long
 #num_blocks = 22
@@ -158,7 +158,7 @@ for eval_idx in range(4):
                               linewidth=1.5)
 
     axs[0, eval_idx].set_xlim(50, 20000)
-    axs[0, eval_idx].set_ylim(0, 1.4)#1.05)
+    axs[0, eval_idx].set_ylim(0, 1.4)
     axs[0, eval_idx].set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
     axs[0, 0].set_ylabel(r'$\overline{\mathrm{IC}}$', fontsize=12)
     #axs[0, 0].set_ylabel('Mean IC', fontsize=12)
