@@ -28,35 +28,39 @@ audio_buffer = signal.filtfilt(b, a, audio_buffer, axis=0)
 output_name = 'Pink'
 
 # Select parameter evaluation
-EVAL_GrainLength = True
-EVAL_MaxGrainDelay = True
+EVAL_GrainLength = False
+EVAL_MaxGrainDelay = False
 EVAL_Layers = True
-EVAL_TempDensity = True
+EVAL_TempDensity = False
 
-RENDER_DIFFUSE_REF = False  # only enable once to render the ref. file
+RENDER_DIFFUSE_REF = True  # only enable once to render the ref. file
 
 maximum_grain_delays = []
 grain_lengths = []
 temporal_densities = []
 angular_distributions = []
 
-num_cond = 4
+
 if EVAL_GrainLength:
+    num_cond = 4
     maximum_grain_delays += [5] * num_cond
     grain_lengths += [0.250, 0.010, 0.002, 0.0005]
     temporal_densities += [0.001] * num_cond
     angular_distributions += ['Uniform_2D'] * num_cond
 if EVAL_MaxGrainDelay:
+    num_cond = 4
     maximum_grain_delays += [5, 0.5, 0.050, 0.005]
     grain_lengths += [0.250] * num_cond
     temporal_densities += [0.001] * num_cond
     angular_distributions += ['Uniform_2D'] * num_cond
 if EVAL_Layers:
+    num_cond = 5
     maximum_grain_delays += [5] * num_cond
     grain_lengths += [0.250] * num_cond
     temporal_densities += [0.005] * num_cond
-    angular_distributions += ['L1', 'L2', 'L3', 'SP']
+    angular_distributions += ['L1', 'L2', 'L3', 'SP', 'ZEN']
 if EVAL_TempDensity:
+    num_cond = 4
     maximum_grain_delays += [5] * num_cond
     grain_lengths += [0.250] * num_cond
     temporal_densities += [0.100, 0.020, 0.005, 0.001]

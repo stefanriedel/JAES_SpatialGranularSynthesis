@@ -7,6 +7,9 @@ Dependencies:
 * matplotlib
 * soundfile
 * joblib
+Optional to render 'ConcretPH' / 'Vocal' sound stimuli:
+* youtube_dl
+* requests
 
 A spatial granular synthesis technique was used to investigate the effect of the temporal and directional density of sound events on listener envelopment ('being surrounded by sound') and engulfment ('being covered by sound'). The idea behind spatial granular synthesis can be seen in the following sketch:
 

@@ -11,7 +11,6 @@ import itertools
 from Utility.DEQ import compute_deq, apply_deq
 
 root_dir = dirname(__file__)
-data_dir = pjoin(root_dir, 'AudioInputFiles')
 save_dir = pjoin(root_dir, 'ExperimentStimuliAudio')
 utility_dir = pjoin(root_dir, 'Utility')
 
@@ -66,7 +65,6 @@ if sound == 'Vocal':
 
 # Select the type of output you want to save to your disk:
 RENDER_MULTICHANNEL_STIMULI = False
-#RENDER_BINAURAL_BRIR_STIMULI = False
 RENDER_BINAURAL_ANECHOEIC_STIMULI = True
 
 EXP1_STIMULI = False
@@ -80,7 +78,7 @@ if EXP1_STIMULI:
 if EXP2_STIMULI:
     seed_range = [1]
     grain_lengths = [0.250]
-    temporal_densities = [0.005]
+    temporal_densities = [0.0005]
     subset = ['L1', 'L1L2', 'L2', 'L2L3', 'L3', 'L1L2L3', 'SP']
 
 parameters = list(
@@ -133,10 +131,10 @@ def renderBinaural(Y, hrir_l, hrir_r, gain=1.0):
 
 
 def mainLoopRendering(idx):
-    maximum_grain_delay = parameters[idx][0]  #seed_range[idx]
-    grain_length = parameters[idx][1]  #grain_lengths[idx]
-    temporal_density = parameters[idx][2]  #temporal_densities[idx]
-    angular_distribution = parameters[idx][3]  #subset[idx]
+    maximum_grain_delay = parameters[idx][0]  
+    grain_length = parameters[idx][1]  
+    temporal_density = parameters[idx][2]  
+    angular_distribution = parameters[idx][3]  
 
     jitter = 0.01  # 1 percent temporal jitter used in the experiment.
     azi_ele, num_channels = getLoudspeaker_ChannelSubset(angular_distribution)
@@ -158,10 +156,7 @@ def mainLoopRendering(idx):
         hrir, num_channels = getHRIR_ChannelSubset(angular_distribution,
                                                    hrir_2D, hrir_3D)
         y_binaural = renderBinaural(Y, hrir[:, 0, :], hrir[:, 1, :])
-        if DEQ:
-            binaural_string = 'BINAURAL_ANECHOEIC_DEQ'
-        else:
-            binaural_string = 'BINAURAL_ANECHOEIC'
+        binaural_string = 'BINAURAL_ANECHOEIC'
 
         output_filename = output_name + '_' + angular_distribution + '_MaxGrainDelay_' + str(
             int(maximum_grain_delay * 1000)) + 'ms_DeltaT_' + str(
@@ -171,17 +166,6 @@ def mainLoopRendering(idx):
                             1000)) + 'ms_' + binaural_string + '.wav'
         output_path = pjoin(save_dir, output_filename)
         soundfile.write(output_path, y_binaural, fs)
-    """if RENDER_BINAURAL_BRIR_STIMULI:
-        hrir_l, hrir_r, num_channels = getHRIR_ChannelSubset(
-            angular_distribution, hrir_2D, hrir_3D)
-        y_binaural = renderBinaural(Y, hrir_l, hrir_r, output_gain)
-        output_filename = output_name + '_' + angular_distribution + '_MaxGrainDelay_' + str(
-            int(maximum_grain_delay * 1000)) + 'ms_DeltaT_' + str(
-                int(temporal_density * 1000)) + 'ms_JitterPercent_' + str(
-                    int(jitter * 100.0)) + '_GrainLength_' + str(
-                        int(grain_length * 1000)) + 'ms_BINAURAL_BRIR.wav'
-        output_path = pjoin(save_dir, output_filename)
-        soundfile.write(output_path, y_binaural, fs)"""
 
     print('File being saved to .\ExperimentStimuliAudio now. \n')
 
